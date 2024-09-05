@@ -25,7 +25,6 @@ const Login = () => {
 
   const handleSignIn = async () => {
     const formData = watch();
-
     // Get current date and time
     const currentDate = new Date();
 
@@ -38,27 +37,39 @@ const Login = () => {
     const data = {
       email: formData.email,
       password: formData.password,
-      date: formattedDate,
+       date: formattedDate,
     };
+    try {
     const response = await signIn(data);
-    if (response.status === "200") {
-      console.log("Sign In Success");
+    if (response.status === 200) {
+      // setIsSuccess(true);
+      //  setAlertMessage(response.message);
 
       // Save User Details to Local Storage
-      {
+     if (response.user) {
         localStorage.setItem("userId", response.user.userId);
         localStorage.setItem("userName", response.user.userName);
         localStorage.setItem("email", response.user.email);
-      }
+     }
+     else {
+      console.log("User not found in response");
+     }
 
+      console.log(formData);
       // Navigate to Home
       navigate("/home");
-    } else {
-      console.log("Sign In Failed :", response.message);
-
+    } 
+    else {
+      // console.log("Sign In Failed :", response.message);
+      // navigate("/home");
       // Show Error Alert
-      setAlertMessage(response.message);
+      // console.log("Error in sign in :", error);
+      console.log(response);
+      setAlertMessage(response.message);  
       setOpenSnackbar(true);
+    }} catch (error) {
+      console.log("Error in sign in :", error);
+      
     }
   };
 

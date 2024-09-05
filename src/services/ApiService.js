@@ -24,8 +24,10 @@ export const signIn = async (data) => {
       email: data.email,
       password: data.password,
       date: data.date,
+      
     });
     return response;
+   
   } catch (error) {
     console.log("Error in sign in :", error);
   }
@@ -35,16 +37,16 @@ export const signIn = async (data) => {
 
 export const sellVehicle = async (data) => {
   try {
-    const response = await postData("vehicle/sell", {
+    const response = await postData("selling/add", {
       vehicleName: data.vehicleName,
       description: data.description,
       year: data.year,
       bidAmount: data.bidAmount,
       startDate: data.startDate,
       endDate: data.endDate,
-      postedDate: data.postedDate,
+      // postedDate: data.postedDate,
       userId: data.userId,
-      imageName : data.imageName,
+      imagePath : data.imageName,
     });
     return response;
   } catch (error) {
@@ -54,7 +56,7 @@ export const sellVehicle = async (data) => {
 
 export const uploadImage = async (data) => {
   try {
-    const response = await sendFormData("image/upload", data)
+    const response = await sendFormData("image/upload?file", data)
     return response;
   }catch (error){
     console.error("Error in uploading image :", error);
@@ -63,7 +65,7 @@ export const uploadImage = async (data) => {
 
 export const getImage = async (imageName) => {
   try {
-    const response = await fetchImage(imageName)
+    const response = await fetchImage(image/view/imageName)
     return response;
   }catch (error){
     console.error("Error in uploading image :", error);
@@ -74,11 +76,11 @@ export const getImage = async (imageName) => {
 
 export const getVehicles = async (data) => {
   try {
-    const response = await postData("vehicle/get", {
+    const response = await getData("selling/get", {
       page: data.page,
       pageCount: data.pageCount,
     });
-    return response;
+    return response;  
   } catch (error) {
     console.log("Error in get vehicles :", error);
   }
@@ -103,7 +105,7 @@ export const getVehiclesByUser = async (data) => {
 
 export const deleteVehicle = async (data) => {
   try {
-    const response = await postData("vehicle/delete", {
+    const response = await postData("selling/delete", {
       vehicleId: data.vehicleId,
     });
     return response;
@@ -116,7 +118,7 @@ export const deleteVehicle = async (data) => {
 
 export const getActiveVehicles = async (data) => {
   try {
-    const response = await postData("vehicle/get-active", {
+    const response = await postData("selling/get", {
       page: data.page,
       pageCount: data.pageCount,
     });
@@ -128,27 +130,30 @@ export const getActiveVehicles = async (data) => {
 
 // ------------------------ Get Deleted Vehicles -----------------------------
 
-export const getDeletedVehicles = async (data) => {
-  try {
-    const response = await postData("vehicle/get-deleted-vehicles", {
-      page: data.page,
-      pageCount: data.pageCount,
-    });
-    return response;
-  } catch (error) {
-    console.log("Error in get deleted vehicles :", error);
-  }
-};
+// // export const getDeletedVehicles = async (data) => {
+// //   try {
+// //     const response = await postData("vehicle/get-deleted-vehicles", {
+// //       page: data.page,
+// //       pageCount: data.pageCount,
+// //     });
+// //     return response;
+// //   } catch (error) {
+// //     console.log("Error in get deleted vehicles :", error);
+// //   }
+// };
 
 // ------------------------ Place Bids -----------------------------   //place bids
 
 export const placeBids = async (data) => {
   try {
-    const response = await postData("bid/place", {
-      email: data.email,
-      vehicleId: data.vehicleId,
+    const response = await postData("bid/save", {
+      userId: data.email,
+      sellingId: data.vehicleId,
       bidAmount: data.bidAmount,
-      date: data.date,
+      
+  //     "userId": 6,
+  // "sellingId": 5,
+  // "bidAmount": 150000.00
     });
     return response;
   } catch (error) {
