@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography
-} from "@mui/material";
-import React from "react";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import login from "../../assets/login.png";
@@ -28,7 +21,8 @@ const Login = () => {
       // Log the entire response object
       console.log("Full login response:", loginResponse);
 
-      if (loginResponse && loginResponse.status === 200) { // Compare status as a number
+      if (loginResponse && loginResponse.status === 200) {
+        // Compare status as a number
         console.log("Login Success");
         // Navigate to the home page or another page
         navigate("/home");
@@ -71,25 +65,63 @@ const Login = () => {
         <Box sx={{ display: "flex", gap: 1 }}>
           <Box component="img" src={logo} sx={{ width: 86, height: 145 }} />
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography sx={{ fontFamily: "poppins", fontSize: 15, fontWeight: "bold", mt: "auto" }}>
+            <Typography
+              sx={{
+                fontFamily: "poppins",
+                fontSize: 15,
+                fontWeight: "bold",
+                mt: "auto",
+              }}
+            >
               Gear Gulf
             </Typography>
-            <Typography sx={{ fontFamily: "poppins", fontSize: 10, fontWeight: "bold", opacity: "50%" }}>
+            <Typography
+              sx={{
+                fontFamily: "poppins",
+                fontSize: 10,
+                fontWeight: "bold",
+                opacity: "50%",
+              }}
+            >
               Auction Cars
             </Typography>
           </Box>
         </Box>
-        <Typography sx={{ fontFamily: "poppins", fontSize: 50, lineHeight: "75px", fontWeight: 600 }}>
+        <Typography
+          sx={{
+            fontFamily: "poppins",
+            fontSize: 50,
+            lineHeight: "75px",
+            fontWeight: 600,
+          }}
+        >
           Log In
         </Typography>
-        <Typography sx={{ fontFamily: "poppins", fontSize: 15, fontWeight: 500, color: "#757575" }}>
-          Bid Smart, Bid Secure: Access Your Auction Account Today - Your Gateway to Exclusive Deals and Rare Finds!
+        <Typography
+          sx={{
+            fontFamily: "poppins",
+            fontSize: 15,
+            fontWeight: 500,
+            color: "#757575",
+          }}
+        >
+          Bid Smart, Bid Secure: Access Your Auction Account Today - Your
+          Gateway to Exclusive Deals and Rare Finds!
         </Typography>
-        <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#757575", mt: 3 }}>
+        <Typography
+          sx={{
+            fontFamily: "poppins",
+            fontSize: 16,
+            fontWeight: 500,
+            color: "#757575",
+            mt: 3,
+          }}
+        >
           Enter Your Email
         </Typography>
         <TextField
           variant="standard"
+          type="email"
           InputProps={{ disableUnderline: true }}
           {...register("email", { required: true })}
           sx={{
@@ -102,7 +134,15 @@ const Login = () => {
             "& .MuiInputBase-root": { height: 40 },
           }}
         />
-        <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#757575", mt: 1 }}>
+        <Typography
+          sx={{
+            fontFamily: "poppins",
+            fontSize: 16,
+            fontWeight: 500,
+            color: "#757575",
+            mt: 1,
+          }}
+        >
           Enter Your Password
         </Typography>
         <TextField
@@ -122,12 +162,31 @@ const Login = () => {
         />
         <Box sx={{ display: "flex", mt: 1, width: "105.3%" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <input type="checkbox" {...register("rememberMe")} style={{ marginRight: "8px" }} />
-            <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#757575" }}>
+            <input
+              type="checkbox"
+              {...register("rememberMe")}
+              style={{ marginRight: "8px" }}
+            />
+            <Typography
+              sx={{
+                fontFamily: "poppins",
+                fontSize: 16,
+                fontWeight: 500,
+                color: "#757575",
+              }}
+            >
               Remember me
             </Typography>
           </Box>
-          <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#6600B5", ml: "auto" }}>
+          <Typography
+            sx={{
+              fontFamily: "poppins",
+              fontSize: 16,
+              fontWeight: 500,
+              color: "#6600B5",
+              ml: "auto",
+            }}
+          >
             Forgot Password
           </Typography>
         </Box>
@@ -149,10 +208,20 @@ const Login = () => {
           LOGIN
         </Button>
         <Typography
-          sx={{ fontFamily: "poppins", fontSize: 12, fontWeight: 500, textAlign: "center", mt: 1, width: "105.3%" }}
+          sx={{
+            fontFamily: "poppins",
+            fontSize: 12,
+            fontWeight: 500,
+            textAlign: "center",
+            mt: 1,
+            width: "105.3%",
+          }}
         >
-          Don't have an account?{" "}
-          <span onClick={() => navigate("/sign-up")} style={{ color: "#6600B5", cursor: "pointer" }}>
+          Don&apos;t have an account?{" "}
+          <span
+            onClick={() => navigate("/sign-up")}
+            style={{ color: "#6600B5", cursor: "pointer" }}
+          >
             Register Now
           </span>
         </Typography>
