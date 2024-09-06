@@ -1,75 +1,44 @@
 import {
   Box,
   Button,
-  Checkbox,
   Grid,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import login from "../../assets/login.png";
 import logo from "../../assets/logo.svg";
-import { signIn } from "../../services/ApiService";
-import { useForm } from "react-hook-form";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
+import NewService from "../../services/NewService";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const { register, handleSubmit } = useForm();
 
-  const { register, watch } = useForm();
+  const onSubmit = async (data) => {
+    console.log("Form data:", data);
 
-  const handleSignIn = async () => {
-    const formData = watch();
-    // Get current date and time
-    const currentDate = new Date();
-
-    // Format date and time as desired (in this case, YYYY-MM-DD HH:MM:SS)
-    const formattedDate = currentDate
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-
-    const data = {
-      email: formData.email,
-      password: formData.password,
-       date: formattedDate,
-    };
     try {
-    const response = await signIn(data);
-    if (response.status === 200) {
-      // setIsSuccess(true);
-      //  setAlertMessage(response.message);
+      const loginResponse = await NewService.login({
+        email: data.email,
+        password: data.password,
+      });
 
-      // Save User Details to Local Storage
-     if (response.user) {
-        localStorage.setItem("userId", response.user.userId);
-        localStorage.setItem("userName", response.user.userName);
-        localStorage.setItem("email", response.user.email);
-     }
-     else {
-      console.log("User not found in response");
-     }
+      // Log the entire response object
+      console.log("Full login response:", loginResponse);
 
-      console.log(formData);
-      // Navigate to Home
-      navigate("/home");
-    } 
-    else {
-      // console.log("Sign In Failed :", response.message);
-      // navigate("/home");
-      // Show Error Alert
-      // console.log("Error in sign in :", error);
-      console.log(response);
-      setAlertMessage(response.message);  
-      setOpenSnackbar(true);
-    }} catch (error) {
-      console.log("Error in sign in :", error);
-      
+      if (loginResponse && loginResponse.status === 200) { // Compare status as a number
+        console.log("Login Success");
+        // Navigate to the home page or another page
+        navigate("/home");
+      } else {
+        console.error("Login Failed:", loginResponse.message);
+        alert(loginResponse.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error in sign in:", error);
+      alert("An error occurred during login. Please try again.");
     }
   };
 
@@ -78,7 +47,7 @@ const Login = () => {
       <Grid
         item
         xs={6}
-        height={"100vh"}
+        height="100vh"
         sx={{
           bgcolor: "rgba(208, 201, 249, 0.5)",
           display: "flex",
@@ -86,14 +55,7 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Box
-          component={"img"}
-          src={login}
-          sx={{
-            width: 510,
-            height: 560,
-          }}
-        />
+        <Box component="img" src={login} sx={{ width: 510, height: 560 }} />
       </Grid>
       <Grid
         item
@@ -103,90 +65,32 @@ const Login = () => {
           flexDirection: "column",
           px: 10,
           py: 2,
-          // justifyContent: 'center',
-          // alignItems: 'center',
           gap: 1,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-          }}
-        >
-          <Box
-            component={"img"}
-            src={logo}
-            sx={{
-              width: 86,
-              height: 145,
-            }}
-          />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: "poppins",
-                fontSize: 15,
-                fontWeight: "bold",
-                mt: "auto",
-              }}
-            >
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Box component="img" src={logo} sx={{ width: 86, height: 145 }} />
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography sx={{ fontFamily: "poppins", fontSize: 15, fontWeight: "bold", mt: "auto" }}>
               Gear Gulf
             </Typography>
-            <Typography
-              sx={{
-                fontFamily: "poppins",
-                fontSize: 10,
-                fontWeight: "bold",
-                opacity: "50%",
-              }}
-            >
+            <Typography sx={{ fontFamily: "poppins", fontSize: 10, fontWeight: "bold", opacity: "50%" }}>
               Auction Cars
             </Typography>
           </Box>
         </Box>
-        <Typography
-          sx={{
-            fontFamily: "poppins",
-            fontSize: 50,
-            lineHeight: "75px",
-            fontWeight: 600,
-          }}
-        >
+        <Typography sx={{ fontFamily: "poppins", fontSize: 50, lineHeight: "75px", fontWeight: 600 }}>
           Log In
         </Typography>
-        <Typography
-          sx={{
-            fontFamily: "poppins",
-            fontSize: 15,
-            fontWeight: 500,
-            color: "#757575",
-          }}
-        >
-          Bid Smart, Bid Secure: Access Your Auction Account Today - Your
-          Gateway to Exclusive Deals and Rare Finds!
+        <Typography sx={{ fontFamily: "poppins", fontSize: 15, fontWeight: 500, color: "#757575" }}>
+          Bid Smart, Bid Secure: Access Your Auction Account Today - Your Gateway to Exclusive Deals and Rare Finds!
         </Typography>
-        <Typography
-          sx={{
-            fontFamily: "poppins",
-            fontSize: 16,
-            fontWeight: 500,
-            color: "#757575",
-            mt: 3,
-          }}
-        >
+        <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#757575", mt: 3 }}>
           Enter Your Email
         </Typography>
         <TextField
           variant="standard"
-          InputProps={{
-            disableUnderline: true,
-          }}
+          InputProps={{ disableUnderline: true }}
           {...register("email", { required: true })}
           sx={{
             width: "100%",
@@ -195,27 +99,16 @@ const Login = () => {
             borderRadius: "5px",
             fontFamily: "poppins",
             bgcolor: "#EFEFEF",
-            "& .MuiInputBase-root": {
-              height: 40,
-            },
+            "& .MuiInputBase-root": { height: 40 },
           }}
         />
-        <Typography
-          sx={{
-            fontFamily: "poppins",
-            fontSize: 16,
-            fontWeight: 500,
-            color: "#757575",
-            mt: 1,
-          }}
-        >
+        <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#757575", mt: 1 }}>
           Enter Your Password
         </Typography>
         <TextField
           variant="standard"
-          InputProps={{
-            disableUnderline: true,
-          }}
+          type="password"
+          InputProps={{ disableUnderline: true }}
           {...register("password", { required: true })}
           sx={{
             width: "100%",
@@ -224,52 +117,22 @@ const Login = () => {
             borderRadius: "5px",
             fontFamily: "poppins",
             bgcolor: "#EFEFEF",
-            "& .MuiInputBase-root": {
-              height: 40,
-            },
+            "& .MuiInputBase-root": { height: 40 },
           }}
         />
-        <Box
-          sx={{
-            display: "flex",
-            mt: 1,
-            width: "105.3%",
-          }}
-        >
-          <Box
-            sx={{
-              width: 25,
-              height: 25,
-              bgcolor: "#EFEFEF",
-              borderRadius: "5px",
-            }}
-          />
-          <Typography
-            sx={{
-              fontFamily: "poppins",
-              fontSize: 16,
-              fontWeight: 500,
-              color: "#757575",
-              ml: 1,
-            }}
-          >
-            Remember me
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "poppins",
-              fontSize: 16,
-              fontWeight: 500,
-              color: "#6600B5",
-              ml: "auto",
-            }}
-          >
+        <Box sx={{ display: "flex", mt: 1, width: "105.3%" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <input type="checkbox" {...register("rememberMe")} style={{ marginRight: "8px" }} />
+            <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#757575" }}>
+              Remember me
+            </Typography>
+          </Box>
+          <Typography sx={{ fontFamily: "poppins", fontSize: 16, fontWeight: 500, color: "#6600B5", ml: "auto" }}>
             Forgot Password
           </Typography>
         </Box>
-        {/* <Button onClick={() => (navigate('/sign-up'))}>Signup</Button> */}
         <Button
-          onClick={handleSignIn}
+          onClick={handleSubmit(onSubmit)}
           variant="contained"
           sx={{
             width: "105.3%",
@@ -280,49 +143,20 @@ const Login = () => {
             fontFamily: "poppins",
             fontSize: 20,
             fontWeight: 600,
-            ":hover": {
-              bgcolor: "#6600B5",
-            },
+            ":hover": { bgcolor: "#6600B5" },
           }}
         >
           LOGIN
         </Button>
         <Typography
-          sx={{
-            fontFamily: "poppins",
-            fontSize: 12,
-            fontWeight: 500,
-            textAlign: "center",
-            mt: 1,
-            width: "105.3%",
-          }}
+          sx={{ fontFamily: "poppins", fontSize: 12, fontWeight: 500, textAlign: "center", mt: 1, width: "105.3%" }}
         >
-          Don’t have an account ?{" "}
-          <span
-            onClick={() => navigate("/sign-up")}
-            style={{
-              color: "#6600B5",
-              cursor: "pointer",
-            }}
-          >
+          Don't have an account?{" "}
+          <span onClick={() => navigate("/sign-up")} style={{ color: "#6600B5", cursor: "pointer" }}>
             Register Now
           </span>
         </Typography>
       </Grid>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={() => setOpenSnackbar(false)}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {alertMessage}
-        </MuiAlert>
-      </Snackbar>
     </Grid>
   );
 };

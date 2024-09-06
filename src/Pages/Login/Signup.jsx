@@ -2,40 +2,42 @@ import {
   Box,
   Button,
   Grid,
+  Alert as MuiAlert,
+  Snackbar,
   TextField,
   Typography,
-  Snackbar,
-  Alert as MuiAlert,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import signup from "../../assets/signup.png";
-import logo from "../../assets/logo.svg";
-import { signUp } from "../../services/ApiService";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.svg";
+import signup from "../../assets/signup.png";
+import NewService from "../../services/NewService";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
   const handleSignUp = async (formData) => {
-    // Data to Send
-    const data = {
-      userName: formData.userName,
-      email: formData.email,
-      password: formData.password,
-    };
-    const response = await signUp(data);
-    if (response.status === "200") {
-      console.log("Sign Up Success");
-      alert("Successfully Registered! Redirecting to Login...");
-      navigate("/log-in");
-    } else {
-      console.log("Sign Up Failed :", response.message);
-      setAlertMessage(response.message);
-      setOpenSnackbar(true);
+    try {
+      const signUpResponse = await NewService.registerUser({
+        email: formData.email,
+        name: formData.userName,
+        password: formData.password,
+      });
+      console.log('signUpResponse', signUpResponse);
+      if (signUpResponse?.message === "User registered successfully") {
+        navigate("/log-in");
+        window.alert("User registered successfully");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -214,12 +216,12 @@ const Signup = () => {
           InputProps={{
             disableUnderline: true,
           }}
-          {...register("email", { 
+          {...register("email", {
             required: "Email is required",
             pattern: {
               value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-              message: "Invalid email address"
-            }
+              message: "Invalid email address",
+            },
           })}
           error={!!errors.email}
           helperText={errors.email ? errors.email.message : ""}
@@ -282,11 +284,7 @@ const Signup = () => {
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <MuiAlert
-          onClose={() => setOpenSnackbar(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
+        <MuiAlert onClose={() => setOpenSnackbar(false)} sx={{ width: "100%" }}>
           {alertMessage}
         </MuiAlert>
       </Snackbar>
