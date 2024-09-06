@@ -1,12 +1,15 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import login from "../../assets/login.png";
 import logo from "../../assets/logo.svg";
 import NewService from "../../services/NewService";
+import { setUser } from "../../reducers/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
@@ -25,6 +28,7 @@ const Login = () => {
         // Compare status as a number
         console.log("Login Success");
         // Navigate to the home page or another page
+        dispatch(setUser(loginResponse?.userData));
         navigate("/home");
       } else {
         console.error("Login Failed:", loginResponse.message);

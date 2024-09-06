@@ -23,6 +23,19 @@ class NewService {
     });
     return response;
   }
+
+  static async saveFeedBack({ userId, feedback, userName, starValue }) {
+    const response = await post({
+      path: "feedback/save",
+      requestBody: {
+        userId,
+        feedback,
+        userName,
+        starValue
+      },
+    });
+    return response;
+  }
 }
 
 export default NewService;

@@ -18,6 +18,8 @@ import Review from "../../Components/Review";
 import car from "../../assets/car.png";
 import { getVehicles } from "../../services/ApiService";
 import { Controller, useForm } from "react-hook-form";
+import NewService from "../../services/NewService";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const { control, handleSubmit } = useForm({
@@ -34,6 +36,8 @@ const Home = () => {
   const [pagesCount, setPagesCount] = useState(0);
 
   const pageCount = 3;
+
+  const userId = useSelector((state) => state.user.id);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -67,8 +71,20 @@ const Home = () => {
     fetchVehicles();
   }, [page]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const feedbackSaveResponse = await NewService.saveFeedBack({
+        feedback: data.feedback,
+        userId: userId,
+        starValue: parseInt(data.rating),
+        userName: data.name,
+      });
+
+      console.log("feedback response", feedbackSaveResponse);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

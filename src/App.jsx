@@ -8,6 +8,8 @@ import Contact from "./Pages/Contact/Contact";
 import MyBids from "./Pages/MyBids/MyBids";
 import Sell from "./Pages/Sell/Sell";
 import Image from "./Pages/Login/Image.jsx";
+import { Provider } from "react-redux";
+import store from "./app/store.js";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
         path: "/image",
         element: <Image />,
       },
-    ]
+    ],
   },
   {
     path: "/",
@@ -56,14 +58,16 @@ const router = createBrowserRouter([
         path: "/sign-up",
         // element: <Signup />,
       },
-    ]
+    ],
   },
 ]);
 
 const App = () => {
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 };
 
-export default App
+export default App;
