@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import "aos/dist/aos.css";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Card from "../../Components/Card";
 import Review from "../../Components/Review";
 import car from "../../assets/car.png";
 import { getVehicles } from "../../services/ApiService";
-import { Controller, useForm } from "react-hook-form";
 import NewService from "../../services/NewService";
-import { useSelector } from "react-redux";
 
 const Home = () => {
   const { control, handleSubmit } = useForm({
