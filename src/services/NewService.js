@@ -21,6 +21,7 @@ class NewService {
         password,
       },
     });
+    return response;
   }
 }
 
