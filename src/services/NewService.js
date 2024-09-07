@@ -1,4 +1,4 @@
-import { post } from "../app/apiManager";
+import { get, post } from "../app/apiManager";
 
 class NewService {
   static async registerUser({ email, name, password }) {
@@ -33,6 +33,13 @@ class NewService {
         userName,
         starValue
       },
+    });
+    return response;
+  }
+
+  static async getAllFeedbacks() {
+    const response = await get({
+      path: "feedback/view",
     });
     return response;
   }

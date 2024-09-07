@@ -34,6 +34,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [cards, setCards] = useState(null);
   const [pagesCount, setPagesCount] = useState(0);
+  const [feedbacks, setFeedbacks] = useState([]);
 
   const pageCount = 3;
 
@@ -70,6 +71,35 @@ const Home = () => {
   useEffect(() => {
     fetchVehicles();
   }, [page]);
+
+  useEffect(() => {
+    fetchFeedbacks();
+  }, []);
+
+  const fetchFeedbacks = async () => {
+    try {
+      const response = await NewService.getAllFeedbacks();
+      console.log("feedbacks", response);
+
+      if (response?.status === 200) {
+        setFeedbacks(response?.feedbackList);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const scrollReviews = (direction) => {
+    const container = document.getElementById("reviews-container");
+    const scrollAmount = 400; // Adjust this value as needed
+    if (container) {
+      if (direction === "left") {
+        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
+    }
+  };
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -452,66 +482,72 @@ const Home = () => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor
         </Typography>
-        <Grid
-          container
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          my={8}
-        >
-          <Grid
-            item
-            md={0.5}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
+        <Box sx={{ position: "relative", width: "80%", px: 4 }}>
+          <IconButton
+            onClick={() => scrollReviews("left")}
+            sx={{
+              position: "absolute",
+              left: 0,
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 2,
+              bgcolor: "#EBEBEB",
+              ":hover": {
+                bgcolor: "#6600B5",
+                color: "#FFFFFF",
+              },
+            }}
           >
-            <IconButton
-              sx={{
-                bgcolor: "#EBEBEB",
-                ":hover": {
-                  bgcolor: "#6600B5",
-                  opacity: "60%",
-                  color: "#FFFFFF",
-                },
-              }}
-            >
-              <ArrowBackRoundedIcon />
-            </IconButton>
-          </Grid>
-          {reviews.map((review) => (
-            <Grid
-              key={review.id}
-              item
-              md={3.5}
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <Review review={review} />
-            </Grid>
-          ))}
-          <Grid
-            item
-            md={0.5}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
+            <ArrowBackRoundedIcon />
+          </IconButton>
+
+          <Box
+            id="reviews-container"
+            sx={{
+              display: "flex",
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
+              gap: 2,
+              py: 2,
+            }}
           >
-            <IconButton
-              sx={{
-                bgcolor: "#EBEBEB",
-                ":hover": {
-                  bgcolor: "#6600B5",
-                  opacity: "60%",
-                  color: "#FFFFFF",
-                },
-              }}
-            >
-              <ArrowForwardRoundedIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
+            {feedbacks.map((review) => (
+              <Box
+                key={review.id}
+                sx={{
+                  flexShrink: 0,
+                  width: { xs: "100%", md: "calc(33.33% - 16px)" },
+                  maxWidth: "400px",
+                  my: 4,
+                }}
+              >
+                <Review review={review} />
+              </Box>
+            ))}
+          </Box>
+
+          <IconButton
+            onClick={() => scrollReviews("right")}
+            sx={{
+              position: "absolute",
+              right: 0,
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 2,
+              bgcolor: "#EBEBEB",
+              ":hover": {
+                bgcolor: "#6600B5",
+                color: "#FFFFFF",
+              },
+            }}
+          >
+            <ArrowForwardRoundedIcon />
+          </IconButton>
+        </Box>
       </Box>
       <Box
         // data-aos="fade-left"
